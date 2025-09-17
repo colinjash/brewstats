@@ -1,0 +1,30 @@
+{
+  "id": "carlos-rodriguez",
+  "name": "Carlos Rodriguez",
+  "position": "SS",
+  "age": 19,
+  "level": "Wisconsin Timber Rattlers",
+  "currentStats": {
+    "avg": ".245",
+    "hr": 8,
+    "rbi": 42,
+    "ops": ".734"
+  },
+  "careerStats": [
+    {
+      "year": 2025,
+      "level": "Wisconsin Timber Rattlers",
+      "g": 125,
+      "pa": 520,
+      "ab": 475,
+      "h": 127,
+      "hr": 8,
+      "rbi": 42,
+      "avg": 0.245,
+      "obp": 0.335,
+      "slg": 0.512,
+      "ops": 0.734,
+      "wrcPlus": 115
+    }
+  ]
+}

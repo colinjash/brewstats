@@ -1,0 +1,30 @@
+{
+  "id": "eduarqui-fernandez",
+  "name": "Eduarqui Fernandez",
+  "position": "OF",
+  "age": 18,
+  "level": "Carolina Mudcats",
+  "currentStats": {
+    "avg": ".241",
+    "hr": 5,
+    "rbi": 34,
+    "ops": ".712"
+  },
+  "careerStats": [
+    {
+      "year": 2025,
+      "level": "Carolina Mudcats",
+      "g": 125,
+      "pa": 520,
+      "ab": 475,
+      "h": 127,
+      "hr": 5,
+      "rbi": 34,
+      "avg": 0.241,
+      "obp": 0.335,
+      "slg": 0.512,
+      "ops": 0.712,
+      "wrcPlus": 115
+    }
+  ]
+}

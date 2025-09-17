@@ -1,0 +1,30 @@
+{
+  "id": "jackson-chourio",
+  "name": "Jackson Chourio",
+  "position": "OF",
+  "age": 20,
+  "level": "Milwaukee Brewers",
+  "currentStats": {
+    "avg": ".267",
+    "hr": 18,
+    "rbi": 65,
+    "ops": ".847"
+  },
+  "careerStats": [
+    {
+      "year": 2025,
+      "level": "Milwaukee Brewers",
+      "g": 125,
+      "pa": 520,
+      "ab": 475,
+      "h": 127,
+      "hr": 18,
+      "rbi": 65,
+      "avg": 0.267,
+      "obp": 0.335,
+      "slg": 0.512,
+      "ops": 0.847,
+      "wrcPlus": 115
+    }
+  ]
+}

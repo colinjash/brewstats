@@ -1,0 +1,30 @@
+{
+  "id": "cooper-pratt",
+  "name": "Cooper Pratt",
+  "position": "2B",
+  "age": 23,
+  "level": "Nashville Sounds",
+  "currentStats": {
+    "avg": ".268",
+    "hr": 11,
+    "rbi": 52,
+    "ops": ".789"
+  },
+  "careerStats": [
+    {
+      "year": 2025,
+      "level": "Nashville Sounds",
+      "g": 125,
+      "pa": 520,
+      "ab": 475,
+      "h": 127,
+      "hr": 11,
+      "rbi": 52,
+      "avg": 0.268,
+      "obp": 0.335,
+      "slg": 0.512,
+      "ops": 0.789,
+      "wrcPlus": 115
+    }
+  ]
+}

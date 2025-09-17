@@ -1,0 +1,30 @@
+{
+  "id": "jeferson-quero",
+  "name": "Jeferson Quero",
+  "position": "C",
+  "age": 21,
+  "level": "Biloxi Shuckers",
+  "currentStats": {
+    "avg": ".272",
+    "hr": 13,
+    "rbi": 57,
+    "ops": ".798"
+  },
+  "careerStats": [
+    {
+      "year": 2025,
+      "level": "Biloxi Shuckers",
+      "g": 125,
+      "pa": 520,
+      "ab": 475,
+      "h": 127,
+      "hr": 13,
+      "rbi": 57,
+      "avg": 0.272,
+      "obp": 0.335,
+      "slg": 0.512,
+      "ops": 0.798,
+      "wrcPlus": 115
+    }
+  ]
+}

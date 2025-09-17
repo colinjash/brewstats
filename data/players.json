@@ -1,0 +1,145 @@
+[
+  {
+    "id": "jackson-chourio",
+    "name": "Jackson Chourio",
+    "position": "OF",
+    "age": 20,
+    "level": "Milwaukee Brewers",
+    "currentStats": {
+      "avg": ".267",
+      "hr": 18,
+      "rbi": 65,
+      "ops": ".847"
+    }
+  },
+  {
+    "id": "garrett-mitchell",
+    "name": "Garrett Mitchell",
+    "position": "CF",
+    "age": 26,
+    "level": "Milwaukee Brewers",
+    "currentStats": {
+      "avg": ".255",
+      "hr": 12,
+      "rbi": 45,
+      "ops": ".795"
+    }
+  },
+  {
+    "id": "william-contreras",
+    "name": "William Contreras",
+    "position": "C",
+    "age": 27,
+    "level": "Milwaukee Brewers",
+    "currentStats": {
+      "avg": ".281",
+      "hr": 17,
+      "rbi": 78,
+      "ops": ".865"
+    }
+  },
+  {
+    "id": "christian-yelich",
+    "name": "Christian Yelich",
+    "position": "LF",
+    "age": 32,
+    "level": "Milwaukee Brewers",
+    "currentStats": {
+      "avg": ".315",
+      "hr": 11,
+      "rbi": 42,
+      "ops": ".906"
+    }
+  },
+  {
+    "id": "willy-adames",
+    "name": "Willy Adames",
+    "position": "SS",
+    "age": 29,
+    "level": "Milwaukee Brewers",
+    "currentStats": {
+      "avg": ".251",
+      "hr": 32,
+      "rbi": 112,
+      "ops": ".794"
+    }
+  },
+  {
+    "id": "tyler-black",
+    "name": "Tyler Black",
+    "position": "SS",
+    "age": 24,
+    "level": "Nashville Sounds",
+    "currentStats": {
+      "avg": ".285",
+      "hr": 16,
+      "rbi": 71,
+      "ops": ".823"
+    }
+  },
+  {
+    "id": "cooper-pratt",
+    "name": "Cooper Pratt",
+    "position": "2B",
+    "age": 23,
+    "level": "Nashville Sounds",
+    "currentStats": {
+      "avg": ".268",
+      "hr": 11,
+      "rbi": 52,
+      "ops": ".789"
+    }
+  },
+  {
+    "id": "brock-wilken",
+    "name": "Brock Wilken",
+    "position": "3B",
+    "age": 22,
+    "level": "Biloxi Shuckers",
+    "currentStats": {
+      "avg": ".289",
+      "hr": 24,
+      "rbi": 78,
+      "ops": ".891"
+    }
+  },
+  {
+    "id": "jeferson-quero",
+    "name": "Jeferson Quero",
+    "position": "C",
+    "age": 21,
+    "level": "Biloxi Shuckers",
+    "currentStats": {
+      "avg": ".272",
+      "hr": 13,
+      "rbi": 57,
+      "ops": ".798"
+    }
+  },
+  {
+    "id": "carlos-rodriguez",
+    "name": "Carlos Rodriguez",
+    "position": "SS",
+    "age": 19,
+    "level": "Wisconsin Timber Rattlers",
+    "currentStats": {
+      "avg": ".245",
+      "hr": 8,
+      "rbi": 42,
+      "ops": ".734"
+    }
+  },
+  {
+    "id": "eduarqui-fernandez",
+    "name": "Eduarqui Fernandez",
+    "position": "OF",
+    "age": 18,
+    "level": "Carolina Mudcats",
+    "currentStats": {
+      "avg": ".241",
+      "hr": 5,
+      "rbi": 34,
+      "ops": ".712"
+    }
+  }
+]

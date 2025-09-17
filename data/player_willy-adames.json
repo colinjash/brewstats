@@ -1,0 +1,30 @@
+{
+  "id": "willy-adames",
+  "name": "Willy Adames",
+  "position": "SS",
+  "age": 29,
+  "level": "Milwaukee Brewers",
+  "currentStats": {
+    "avg": ".251",
+    "hr": 32,
+    "rbi": 112,
+    "ops": ".794"
+  },
+  "careerStats": [
+    {
+      "year": 2025,
+      "level": "Milwaukee Brewers",
+      "g": 125,
+      "pa": 520,
+      "ab": 475,
+      "h": 127,
+      "hr": 32,
+      "rbi": 112,
+      "avg": 0.251,
+      "obp": 0.335,
+      "slg": 0.512,
+      "ops": 0.794,
+      "wrcPlus": 115
+    }
+  ]
+}
