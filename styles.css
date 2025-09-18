@@ -1,9 +1,14 @@
 :root {
-    --powder-blue: #87CEEB;
+    --brewers-blue: #0C2340;
     --brewers-gold: #FFB81C;
-    --navy-blue: #0C2340;
-    --cream: #FDF6E3;
-    --light-blue: #B8E6F0;
+    --powder-blue: #87CEEB;
+    --light-gray: #f8f9fa;
+    --medium-gray: #e9ecef;
+    --dark-gray: #6c757d;
+    --text-primary: #212529;
+    --text-secondary: #495057;
+    --border-color: #dee2e6;
+    --hover-color: #f1f3f4;
 }
 
 * {
@@ -13,347 +18,306 @@
 }
 
 body {
-    font-family: 'Arial', sans-serif;
-    background: linear-gradient(135deg, var(--cream) 0%, var(--light-blue) 100%);
-    color: var(--navy-blue);
-    line-height: 1.6;
-    min-height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background: #ffffff;
+    color: var(--text-primary);
+    line-height: 1.5;
 }
 
 .container {
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
     padding: 0 20px;
 }
 
 /* Header */
-.retro-header {
-    background: linear-gradient(45deg, var(--powder-blue) 0%, var(--brewers-gold) 100%);
-    padding: 2rem 0;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    border-bottom: 4px solid var(--navy-blue);
-}
-
-.site-title {
-    font-size: 3rem;
-    font-weight: 900;
-    color: var(--navy-blue);
-    text-shadow: 2px 2px 4px rgba(255,255,255,0.5);
-    letter-spacing: -2px;
-    margin-bottom: 0.5rem;
-}
-
-.site-subtitle {
-    font-size: 1.2rem;
-    color: var(--navy-blue);
-    opacity: 0.8;
-    font-weight: 600;
-}
-
-/* Breadcrumb */
-.breadcrumb {
-    background: var(--navy-blue);
+.main-header {
+    background: var(--brewers-blue);
+    color: white;
     padding: 1rem 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-.breadcrumb a {
-    color: var(--cream);
-    text-decoration: none;
-    font-weight: 600;
-    transition: color 0.3s ease;
-}
-
-.breadcrumb a:hover {
-    color: var(--brewers-gold);
-}
-
-/* Main Content */
-main {
-    padding: 2rem 0;
-}
-
-/* Controls Section */
-.controls-section {
-    margin-bottom: 2rem;
-}
-
-.search-filter-container {
-    display: flex;
-    gap: 1rem;
-    margin-bottom: 1rem;
-    flex-wrap: wrap;
-}
-
-.search-input, .level-filter {
-    padding: 1rem;
-    font-size: 1rem;
-    border: 3px solid var(--powder-blue);
-    border-radius: 10px;
-    background: white;
-    color: var(--navy-blue);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-}
-
-.search-input {
-    flex: 2;
-    min-width: 300px;
-}
-
-.level-filter {
-    flex: 1;
-    min-width: 150px;
-}
-
-.search-input:focus, .level-filter:focus {
-    outline: none;
-    border-color: var(--brewers-gold);
-    box-shadow: 0 0 0 3px rgba(255,184,28,0.2);
-}
-
-.stats-summary {
-    background: white;
-    padding: 1rem;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    border: 2px solid var(--light-blue);
-    text-align: center;
-    font-weight: 600;
-}
-
-/* Players List */
-.players-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-    gap: 1.5rem;
-}
-
-.player-card {
-    background: white;
-    border-radius: 10px;
-    padding: 1.5rem;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    border: 2px solid var(--light-blue);
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.player-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-    border-color: var(--brewers-gold);
-}
-
-.player-name {
-    font-size: 1.4rem;
-    font-weight: bold;
-    color: var(--navy-blue);
-    margin-bottom: 0.5rem;
-}
-
-.player-details {
+.header-content {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1rem;
-    flex-wrap: wrap;
-    gap: 0.5rem;
 }
 
-.position-tag {
-    background: var(--brewers-gold);
-    color: var(--navy-blue);
-    padding: 0.3rem 0.8rem;
-    border-radius: 15px;
-    font-weight: bold;
+.site-title {
+    font-size: 1.75rem;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+}
+
+.header-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
     font-size: 0.9rem;
+    opacity: 0.9;
 }
 
-.level-tag {
-    background: var(--light-blue);
-    color: var(--navy-blue);
-    padding: 0.3rem 0.8rem;
-    border-radius: 15px;
-    font-weight: bold;
-    font-size: 0.9rem;
+.org-name {
+    font-weight: 500;
 }
 
-.age-tag {
-    background: var(--powder-blue);
-    color: var(--navy-blue);
-    padding: 0.3rem 0.8rem;
-    border-radius: 15px;
-    font-weight: bold;
-    font-size: 0.9rem;
+.season {
+    font-size: 0.8rem;
+    opacity: 0.8;
 }
 
-.quick-stats {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+/* Navigation */
+.main-nav {
+    background: var(--light-gray);
+    border-bottom: 1px solid var(--border-color);
+    padding: 0.75rem 0;
+}
+
+.nav-controls {
+    display: flex;
     gap: 1rem;
+    align-items: center;
+}
+
+.search-container {
+    flex: 1;
+    max-width: 400px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
     font-size: 0.9rem;
-    color: var(--navy-blue);
+    background: white;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--brewers-gold);
+    box-shadow: 0 0 0 2px rgba(255, 184, 28, 0.2);
+}
+
+.level-select {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background: white;
+    font-size: 0.9rem;
+    min-width: 120px;
+}
+
+.level-select:focus {
+    outline: none;
+    border-color: var(--brewers-gold);
+}
+
+/* Stats Header */
+.stats-header {
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.summary-stats {
+    display: flex;
+    gap: 2rem;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
 }
 
 .stat-item {
-    text-align: center;
-    background: var(--cream);
-    padding: 0.5rem;
-    border-radius: 8px;
-    border: 1px solid var(--light-blue);
+    font-weight: 500;
 }
 
-.stat-label {
-    display: block;
-    font-size: 0.8rem;
-    opacity: 0.7;
-    margin-bottom: 0.2rem;
+/* Data Table */
+.data-section {
+    padding: 1rem 0;
 }
 
-.stat-value {
-    font-weight: bold;
-    font-size: 1rem;
-}
-
-/* Player Stats Page */
-.player-stats-container {
+.table-container {
+    overflow-x: auto;
     background: white;
-    border-radius: 15px;
-    padding: 2rem;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-    border: 3px solid var(--powder-blue);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
 }
 
-.player-header {
-    text-align: center;
-    margin-bottom: 2rem;
-    padding-bottom: 2rem;
-    border-bottom: 2px solid var(--light-blue);
-}
-
-.player-title {
-    font-size: 2.5rem;
-    color: var(--navy-blue);
-    margin-bottom: 1rem;
-}
-
-.player-meta {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    flex-wrap: wrap;
-    margin-bottom: 1rem;
-}
-
-.stats-section {
-    margin-bottom: 2rem;
-}
-
-.section-title {
-    font-size: 1.5rem;
-    color: var(--navy-blue);
-    margin-bottom: 1rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 2px solid var(--brewers-gold);
-}
-
-/* Stats Table */
-.stats-table {
+.data-table {
     width: 100%;
     border-collapse: collapse;
+    font-size: 0.85rem;
+}
+
+.data-table th {
+    background: var(--light-gray);
+    padding: 0.75rem 0.5rem;
+    text-align: left;
+    font-weight: 600;
+    color: var(--text-primary);
+    border-bottom: 2px solid var(--border-color);
+    white-space: nowrap;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.data-table th:first-child {
+    padding-left: 1rem;
+    position: sticky;
+    left: 0;
+    background: var(--light-gray);
+    z-index: 11;
+}
+
+.data-table td {
+    padding: 0.5rem;
+    border-bottom: 1px solid var(--border-color);
+    white-space: nowrap;
+}
+
+.data-table td:first-child {
+    padding-left: 1rem;
+    position: sticky;
+    left: 0;
     background: white;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    margin: 1rem 0;
-    font-size: 0.9rem;
+    font-weight: 500;
+    z-index: 5;
 }
 
-.stats-table th {
-    background: var(--powder-blue);
-    color: var(--navy-blue);
-    padding: 0.8rem 0.5rem;
+.data-table tbody tr:hover {
+    background: var(--hover-color);
+}
+
+.data-table tbody tr:hover td:first-child {
+    background: var(--hover-color);
+}
+
+/* Player Name Column */
+.player-name {
+    color: var(--brewers-blue);
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.player-name:hover {
+    color: var(--brewers-gold);
+    text-decoration: underline;
+}
+
+/* Level Tags */
+.level-tag {
+    display: inline-block;
+    padding: 0.2rem 0.5rem;
+    border-radius: 3px;
+    font-size: 0.75rem;
+    font-weight: 500;
     text-align: center;
-    font-weight: bold;
-    font-size: 0.8rem;
+    min-width: 40px;
 }
 
-.stats-table td {
-    padding: 0.8rem 0.5rem;
-    text-align: center;
-    border-bottom: 1px solid var(--light-blue);
+.level-mlb { background: var(--brewers-blue); color: white; }
+.level-aaa { background: var(--brewers-gold); color: var(--brewers-blue); }
+.level-aa { background: var(--powder-blue); color: var(--brewers-blue); }
+.level-a-plus { background: var(--medium-gray); color: var(--text-primary); }
+.level-a { background: var(--light-gray); color: var(--text-primary); }
+.level-cpx { background: #e8f5e8; color: #2d5016; }
+.level-dsl { background: #fff3cd; color: #856404; }
+
+/* Number formatting */
+.stat-number {
+    text-align: right;
 }
 
-.stats-table tr:hover {
-    background: var(--light-blue);
+.stat-avg {
+    font-family: 'Monaco', 'Menlo', monospace;
 }
 
-.level-cell {
-    background: var(--brewers-gold);
-    color: var(--navy-blue);
-    font-weight: bold;
+.stat-positive {
+    color: #28a745;
 }
 
-/* Loading & Error States */
+.stat-negative {
+    color: #dc3545;
+}
+
+/* Loading & Error */
 .loading {
     text-align: center;
-    padding: 2rem;
-    font-size: 1.2rem;
-    color: var(--navy-blue);
+    padding: 3rem;
+    color: var(--text-secondary);
 }
 
 .error-message {
-    background: #ffebee;
-    border: 2px solid #ef5350;
-    border-radius: 10px;
+    background: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
     padding: 1rem;
+    border-radius: 4px;
     margin: 1rem 0;
-    color: #c62828;
-    text-align: center;
 }
 
 /* Footer */
-.retro-footer {
-    background: var(--navy-blue);
-    color: var(--cream);
+.main-footer {
+    background: var(--light-gray);
+    border-top: 1px solid var(--border-color);
+    padding: 1rem 0;
+    margin-top: 2rem;
     text-align: center;
-    padding: 2rem 0;
-    margin-top: 4rem;
-}
-
-.retro-footer p {
-    margin-bottom: 0.5rem;
-    opacity: 0.8;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
 }
 
 /* Responsive */
 @media (max-width: 768px) {
-    .site-title {
-        font-size: 2rem;
-    }
-    
-    .players-list {
-        grid-template-columns: 1fr;
-    }
-    
-    .search-filter-container {
+    .header-content {
         flex-direction: column;
+        gap: 0.5rem;
+        text-align: center;
     }
     
-    .search-input, .level-filter {
-        min-width: 100%;
-    }
-    
-    .player-details {
+    .nav-controls {
         flex-direction: column;
-        align-items: flex-start;
+        gap: 0.5rem;
     }
     
-    .player-meta {
-        flex-direction: column;
-        align-items: center;
+    .search-container {
+        max-width: none;
     }
     
-    .quick-stats {
-        grid-template-columns: repeat(2, 1fr);
+    .summary-stats {
+        justify-content: center;
+        text-align: center;
+        flex-wrap: wrap;
     }
+    
+    .data-table {
+        font-size: 0.75rem;
+    }
+    
+    .data-table th,
+    .data-table td {
+        padding: 0.4rem 0.3rem;
+    }
+}
+
+/* Sortable headers */
+.sortable {
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+}
+
+.sortable:hover {
+    background: var(--medium-gray);
+}
+
+.sortable.sorted-asc::after {
+    content: ' ▲';
+    font-size: 0.7em;
+}
+
+.sortable.sorted-desc::after {
+    content: ' ▼';
+    font-size: 0.7em;
 }

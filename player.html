@@ -1,260 +1,101 @@
-class PlayerStatsPage {
-    constructor() {
-        this.playerId = new URLSearchParams(window.location.search).get('id');
-        this.player = null;
-        this.mlbData = [];
-        this.milbData = [];
-        this.init();
-    }
-
-    async init() {
-        try {
-            await this.loadCSVFiles();
-            this.findPlayer();
-            this.renderPlayer();
-        } catch (error) {
-            this.showError(`Error loading player data: ${error.message}`);
-        } finally {
-            document.getElementById('loading').style.display = 'none';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player Stats - BrewStats</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .player-page {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
         }
-    }
-
-    async loadCSVFiles() {
-        // Load both CSV files
-        const [mlbResponse, milbResponse] = await Promise.all([
-            fetch('fg.csv'),
-            fetch('fg2.csv')
-        ]);
-
-        if (mlbResponse.ok) {
-            const mlbText = await mlbResponse.text();
-            this.mlbData = Papa.parse(mlbText, { header: true, skipEmptyLines: true }).data;
+        .player-header {
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
         }
-
-        if (milbResponse.ok) {
-            const milbText = await milbResponse.text();
-            this.milbData = Papa.parse(milbText, { header: true, skipEmptyLines: true }).data;
+        .player-title {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--brewers-blue);
+            margin-bottom: 0.5rem;
         }
-    }
-
-    findPlayer() {
-        // Search for player in both datasets
-        const mlbPlayer = this.mlbData.find(p =>
-            this.createPlayerId(this.cleanName(p.Name)) === this.playerId
-        );
-
-        const milbPlayer = this.milbData.find(p =>
-            this.createPlayerId(this.cleanName(p.Name)) === this.playerId
-        );
-
-        if (!mlbPlayer && !milbPlayer) {
-            this.showError('Player not found');
-            return;
+        .player-meta {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            color: var(--text-secondary);
         }
-
-        // Create combined player object
-        const name = this.cleanName(mlbPlayer?.Name || milbPlayer?.Name);
-        
-        this.player = {
-            id: this.playerId,
-            name: name,
-            level: mlbPlayer ? 'MLB' : (milbPlayer?.Level || 'A'),
-            age: mlbPlayer ? 27 : parseInt(milbPlayer?.Age) || 22,
-            position: this.guessPosition(mlbPlayer, milbPlayer),
-            mlbStats: mlbPlayer ? this.parseMLBStats(mlbPlayer) : null,
-            milbStats: milbPlayer ? this.parseMILBStats(milbPlayer) : null
-        };
-    }
-
-    parseMLBStats(player) {
-        return {
-            G: parseInt(player.G) || 0,
-            PA: parseInt(player.PA) || 0,
-            HR: parseInt(player.HR) || 0,
-            R: parseInt(player.R) || 0,
-            RBI: parseInt(player.RBI) || 0,
-            SB: parseInt(player.SB) || 0,
-            'BB%': parseFloat(player['BB%']) || 0,
-            'K%': parseFloat(player['K%']) || 0,
-            ISO: parseFloat(player.ISO) || 0,
-            BABIP: parseFloat(player.BABIP) || 0,
-            AVG: parseFloat(player.AVG) || 0,
-            OBP: parseFloat(player.OBP) || 0,
-            SLG: parseFloat(player.SLG) || 0,
-            wOBA: parseFloat(player.wOBA) || 0,
-            'wRC+': parseInt(player['wRC+']) || 0,
-            WAR: parseFloat(player.WAR) || 0
-        };
-    }
-
-    parseMILBStats(player) {
-        return {
-            Level: player.Level || 'A',
-            G: parseInt(player.G) || 0,
-            AB: parseInt(player.AB) || 0,
-            PA: parseInt(player.PA) || 0,
-            H: parseInt(player.H) || 0,
-            '1B': parseInt(player['1B']) || 0,
-            '2B': parseInt(player['2B']) || 0,
-            '3B': parseInt(player['3B']) || 0,
-            HR: parseInt(player.HR) || 0,
-            R: parseInt(player.R) || 0,
-            RBI: parseInt(player.RBI) || 0,
-            BB: parseInt(player.BB) || 0,
-            SO: parseInt(player.SO) || 0,
-            SB: parseInt(player.SB) || 0,
-            CS: parseInt(player.CS) || 0,
-            AVG: parseFloat(player.AVG) || 0
-        };
-    }
-
-    guessPosition(mlbPlayer, milbPlayer) {
-        // Simple position guessing
-        if (mlbPlayer?.Def > 5) return 'SS';
-        if (mlbPlayer?.Def > 0) return 'IF';
-        return 'OF';
-    }
-
-    renderPlayer() {
-        if (!this.player) {
-            document.getElementById('player-stats').innerHTML = '<h2>Player not found</h2>';
-            return;
+        .back-link {
+            display: inline-block;
+            margin-bottom: 1rem;
+            color: var(--brewers-blue);
+            text-decoration: none;
+            font-weight: 500;
         }
-
-        const html = `
-            <div class="player-header">
-                <h1 class="player-title">${this.player.name}</h1>
-                <div class="player-meta">
-                    <span class="position-tag">${this.player.position}</span>
-                    <span class="age-tag">Age ${this.player.age}</span>
-                    <span class="level-tag">${this.player.level}</span>
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .stats-grid {
+            display: grid;
+            gap: 2rem;
+        }
+        .stat-section {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .stat-section h3 {
+            background: var(--light-gray);
+            padding: 1rem;
+            margin: 0;
+            font-size: 1.1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .stat-section .data-table {
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <div class="container">
+            <div class="header-content">
+                <h1 class="site-title">BrewStats</h1>
+                <div class="header-meta">
+                    <span class="org-name">Milwaukee Brewers Organization</span>
+                    <span class="season">2025 Season</span>
                 </div>
             </div>
+        </div>
+    </header>
 
-            ${this.player.mlbStats ? this.renderMLBStats() : ''}
-            ${this.player.milbStats ? this.renderMILBStats() : ''}
-        `;
-
-        document.getElementById('player-stats').innerHTML = html;
-    }
-
-    renderMLBStats() {
-        const stats = this.player.mlbStats;
+    <div class="player-page">
+        <a href="index.html" class="back-link">← Back to All Players</a>
         
-        return `
-            <div class="stats-section">
-                <h2 class="section-title">2025 MLB Statistics</h2>
-                <table class="stats-table">
-                    <thead>
-                        <tr>
-                            <th>G</th><th>PA</th><th>HR</th><th>R</th><th>RBI</th><th>SB</th>
-                            <th>AVG</th><th>OBP</th><th>SLG</th><th>wOBA</th><th>wRC+</th><th>WAR</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>${stats.G}</td>
-                            <td>${stats.PA}</td>
-                            <td>${stats.HR}</td>
-                            <td>${stats.R}</td>
-                            <td>${stats.RBI}</td>
-                            <td>${stats.SB}</td>
-                            <td>${stats.AVG.toFixed(3)}</td>
-                            <td>${stats.OBP.toFixed(3)}</td>
-                            <td>${stats.SLG.toFixed(3)}</td>
-                            <td>${stats.wOBA.toFixed(3)}</td>
-                            <td>${stats['wRC+']}</td>
-                            <td>${stats.WAR.toFixed(1)}</td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <table class="stats-table" style="margin-top: 1rem;">
-                    <thead>
-                        <tr>
-                            <th>BB%</th><th>K%</th><th>ISO</th><th>BABIP</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>${(stats['BB%'] * 100).toFixed(1)}%</td>
-                            <td>${(stats['K%'] * 100).toFixed(1)}%</td>
-                            <td>${stats.ISO.toFixed(3)}</td>
-                            <td>${stats.BABIP.toFixed(3)}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        `;
-    }
-
-    renderMILBStats() {
-        const stats = this.player.milbStats;
+        <div id="loading" class="loading">Loading player data...</div>
+        <div id="error-message" class="error-message" style="display: none;"></div>
         
-        return `
-            <div class="stats-section">
-                <h2 class="section-title">2025 Minor League Statistics (${stats.Level})</h2>
-                <table class="stats-table">
-                    <thead>
-                        <tr>
-                            <th>Level</th><th>G</th><th>AB</th><th>PA</th><th>H</th><th>1B</th><th>2B</th><th>3B</th><th>HR</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="level-cell">${stats.Level}</td>
-                            <td>${stats.G}</td>
-                            <td>${stats.AB}</td>
-                            <td>${stats.PA}</td>
-                            <td>${stats.H}</td>
-                            <td>${stats['1B']}</td>
-                            <td>${stats['2B']}</td>
-                            <td>${stats['3B']}</td>
-                            <td>${stats.HR}</td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <table class="stats-table" style="margin-top: 1rem;">
-                    <thead>
-                        <tr>
-                            <th>R</th><th>RBI</th><th>BB</th><th>SO</th><th>SB</th><th>CS</th><th>AVG</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>${stats.R}</td>
-                            <td>${stats.RBI}</td>
-                            <td>${stats.BB}</td>
-                            <td>${stats.SO}</td>
-                            <td>${stats.SB}</td>
-                            <td>${stats.CS}</td>
-                            <td>${stats.AVG.toFixed(3)}</td>
-                        </tr>
-                    </tbody>
-                </table>
+        <div id="player-content" style="display: none;">
+            <div class="player-header">
+                <h1 class="player-title" id="player-name">-</h1>
+                <div class="player-meta">
+                    <span id="player-level" class="level-tag">-</span>
+                    <span id="player-age">-</span>
+                    <span id="player-type">-</span>
+                </div>
             </div>
-        `;
-    }
+            
+            <div class="stats-grid" id="stats-container">
+                <!-- Dynamic stats tables -->
+            </div>
+        </div>
+    </div>
 
-    cleanName(name) {
-        return name ? name.replace(/['"]/g, '').trim() : '';
-    }
-
-    createPlayerId(name) {
-        return name.toLowerCase()
-                  .replace(/[^a-z0-9\s]/g, '')
-                  .replace(/\s+/g, '-');
-    }
-
-    showError(message) {
-        const errorDiv = document.getElementById('error-message');
-        errorDiv.textContent = message;
-        errorDiv.style.display = 'block';
-    }
-}
-
-// Initialize
-document.addEventListener('DOMContentLoaded', () => {
-    new PlayerStatsPage();
-});
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <script src="player.js"></script>
+</body>
+</html>

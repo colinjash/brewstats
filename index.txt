@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BrewStats - Milwaukee Brewers Organization</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="main-header">
+        <div class="container">
+            <div class="header-content">
+                <h1 class="site-title">BrewStats</h1>
+                <div class="header-meta">
+                    <span class="org-name">Milwaukee Brewers Organization</span>
+                    <span class="season">2025 Season</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav class="main-nav">
+        <div class="container">
+            <div class="nav-controls">
+                <div class="search-container">
+                    <input type="text" id="player-search" placeholder="Search players..." class="search-input">
+                </div>
+                <div class="filter-container">
+                    <select id="level-filter" class="level-select">
+                        <option value="">All Levels</option>
+                        <option value="MLB">MLB</option>
+                        <option value="AAA">AAA</option>
+                        <option value="AA">AA</option>
+                        <option value="A+">High-A</option>
+                        <option value="A">Low-A</option>
+                        <option value="CPX">Complex</option>
+                        <option value="DSL">DSL</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <section class="stats-header">
+            <div id="stats-summary" class="summary-stats">
+                <span id="total-players" class="stat-item">Loading...</span>
+            </div>
+        </section>
+
+        <section class="data-section">
+            <div id="loading" class="loading">Loading player data...</div>
+            <div id="error-message" class="error-message" style="display: none;"></div>
+            
+            <div class="table-container">
+                <table id="players-table" class="data-table" style="display: none;">
+                    <thead>
+                        <tr id="table-headers">
+                            <!-- Dynamic headers -->
+                        </tr>
+                    </thead>
+                    <tbody id="table-body">
+                        <!-- Dynamic data -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <p>BrewStats © 2025 | Data updated daily</p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

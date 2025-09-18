@@ -1,146 +1,237 @@
-class PlayerStats {
+class PlayerPage {
     constructor() {
         this.playerId = new URLSearchParams(window.location.search).get('id');
         this.player = null;
+        this.mlbData = [];
+        this.milbData = [];
         this.init();
     }
 
     async init() {
-        await this.loadPlayerStats();
-        this.renderPlayerStats();
-        document.getElementById('loading').style.display = 'none';
-    }
-
-    async loadPlayerStats() {
         try {
-            // Try to load real player data
-            const response = await fetch(`data/player_${this.playerId}.json`);
-            if (response.ok) {
-                this.player = await response.json();
-            } else {
-                // Fallback to sample data
-                this.player = this.getSamplePlayer();
-            }
+            await this.loadData();
+            this.findPlayer();
+            this.renderPlayer();
         } catch (error) {
-            console.error('Error loading player stats:', error);
-            this.player = this.getSamplePlayer();
+            this.showError(`Error loading data: ${error.message}`);
+        } finally {
+            document.getElementById('loading').style.display = 'none';
         }
     }
 
-    getSamplePlayer() {
-        // Sample detailed player data
-        const samplePlayers = {
-            'jackson-chourio': {
-                name: 'Jackson Chourio',
-                position: 'OF',
-                age: 20,
-                currentLevel: 'Milwaukee Brewers',
-                careerStats: [
-                    { year: 2025, level: 'MLB', g: 142, pa: 586, ab: 532, h: 142, hr: 18, rbi: 65, avg: .267, obp: .320, slg: .527, ops: .847, wrcPlus: 115 },
-                    { year: 2024, level: 'AA/AAA', g: 98, pa: 432, ab: 389, h: 95, hr: 21, rbi: 79, avg: .244, obp: .301, slg: .477, ops: .778, wrcPlus: 98 },
-                    { year: 2023, level: 'High-A', g: 89, pa: 395, ab: 356, h: 101, hr: 22, rbi: 88, avg: .284, obp: .358, slg: .527, ops: .885, wrcPlus: 145 }
-                ]
-            },
-            'tyler-black': {
-                name: 'Tyler Black',
-                position: 'SS',
-                age: 24,
-                currentLevel: 'Nashville Sounds',
-                careerStats: [
-                    { year: 2025, level: 'AAA', g: 125, pa: 542, ab: 485, h: 138, hr: 16, rbi: 71, avg: .285, obp: .356, slg: .467, ops: .823, wrcPlus: 125 },
-                    { year: 2024, level: 'AA', g: 112, pa: 489, ab: 441, h: 111, hr: 11, rbi: 58, avg: .252, obp: .318, slg: .438, ops: .756, wrcPlus: 105 },
-                    { year: 2023, level: 'High-A', g: 89, pa: 378, ab: 342, h: 81, hr: 9, rbi: 45, avg: .237, obp: .297, slg: .424, ops: .721, wrcPlus: 95 }
-                ]
-            }
-        };
+    async loadData() {
+        // Load both CSV files (same as main page)
+        const [mlbResponse, milbResponse] = await Promise.all([
+            fetch('fg.csv'),
+            fetch('fg2.csv')
+        ]);
 
-        return samplePlayers[this.playerId] || {
-            name: 'Player Not Found',
-            position: '',
-            age: 0,
-            currentLevel: '',
-            careerStats: []
-        };
+        if (mlbResponse.ok) {
+            const mlbText = await mlbResponse.text();
+            this.mlbData = Papa.parse(mlbText, { header: true }).data;
+        }
+
+        if (milbResponse.ok) {
+            const milbText = await milbResponse.text();
+            this.milbData = Papa.parse(milbText, { header: true }).data;
+        }
     }
 
-    renderPlayerStats() {
-        if (!this.player || !this.player.name) {
-            document.getElementById('player-stats').innerHTML = '<h2>Player not found</h2>';
+    findPlayer() {
+        // Find player in both datasets
+        const mlbPlayer = this.mlbData.find(p =>
+            p.Name && this.createId(this.cleanName(p.Name)) === this.playerId
+        );
+
+        const milbPlayer = this.milbData.find(p =>
+            p.Name && this.createId(this.cleanName(p.Name)) === this.playerId
+        );
+
+        if (!mlbPlayer && !milbPlayer) {
+            this.showError('Player not found');
             return;
         }
 
-        const html = `
-            <div class="player-header">
-                <h1 class="player-title">${this.player.name}</h1>
-                <div class="player-meta">
-                    <span class="position-tag">${this.player.position}</span>
-                    <span class="age-tag">Age ${this.player.age}</span>
-                    <span class="level-tag">${this.player.currentLevel}</span>
+        this.player = {
+            mlb: mlbPlayer,
+            milb: milbPlayer,
+            name: this.cleanName((mlbPlayer?.Name || milbPlayer?.Name)),
+            id: this.playerId
+        };
+    }
+
+    renderPlayer() {
+        if (!this.player) return;
+
+        document.getElementById('player-name').textContent = this.player.name;
+        
+        if (this.player.mlb) {
+            document.getElementById('player-level').textContent = 'MLB';
+            document.getElementById('player-level').className = 'level-tag level-mlb';
+            document.getElementById('player-type').textContent = 'Major League';
+        } else if (this.player.milb) {
+            const level = this.player.milb.Level;
+            document.getElementById('player-level').textContent = level;
+            document.getElementById('player-level').className = `level-tag level-${level.toLowerCase().replace('+', '-plus')}`;
+            document.getElementById('player-age').textContent = `Age ${this.player.milb.Age}`;
+            document.getElementById('player-type').textContent = 'Minor League';
+        }
+
+        // Render stats sections
+        const container = document.getElementById('stats-container');
+        let html = '';
+
+        if (this.player.mlb) {
+            html += this.renderMLBStats();
+        }
+
+        if (this.player.milb) {
+            html += this.renderMILBStats();
+        }
+
+        container.innerHTML = html;
+        document.getElementById('player-content').style.display = 'block';
+    }
+
+    renderMLBStats() {
+        const player = this.player.mlb;
+        
+        return `
+            <div class="stat-section">
+                <h3>2025 MLB Statistics</h3>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>G</th><th>PA</th><th>HR</th><th>R</th><th>RBI</th><th>SB</th>
+                                <th>AVG</th><th>OBP</th><th>SLG</th><th>wOBA</th><th>wRC+</th><th>WAR</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="stat-number">${player.G}</td>
+                                <td class="stat-number">${player.PA}</td>
+                                <td class="stat-number">${player.HR}</td>
+                                <td class="stat-number">${player.R}</td>
+                                <td class="stat-number">${player.RBI}</td>
+                                <td class="stat-number">${player.SB}</td>
+                                <td class="stat-number stat-avg">${parseFloat(player.AVG).toFixed(3)}</td>
+                                <td class="stat-number stat-avg">${parseFloat(player.OBP).toFixed(3)}</td>
+                                <td class="stat-number stat-avg">${parseFloat(player.SLG).toFixed(3)}</td>
+                                <td class="stat-number stat-avg">${parseFloat(player.wOBA).toFixed(3)}</td>
+                                <td class="stat-number">${parseInt(player['wRC+']) || '-'}</td>
+                                <td class="stat-number">${parseFloat(player.WAR).toFixed(1)}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
-            <div class="stats-section">
-                <h2 class="section-title">Career Statistics</h2>
-                ${this.createStatsTable()}
+            <div class="stat-section">
+                <h3>Advanced Metrics</h3>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>BB%</th><th>K%</th><th>ISO</th><th>BABIP</th><th>BsR</th><th>Off</th><th>Def</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="stat-number">${(parseFloat(player['BB%']) * 100).toFixed(1)}%</td>
+                                <td class="stat-number">${(parseFloat(player['K%']) * 100).toFixed(1)}%</td>
+                                <td class="stat-number stat-avg">${parseFloat(player.ISO).toFixed(3)}</td>
+                                <td class="stat-number stat-avg">${parseFloat(player.BABIP).toFixed(3)}</td>
+                                <td class="stat-number">${parseFloat(player.BsR).toFixed(1)}</td>
+                                <td class="stat-number">${parseFloat(player.Off).toFixed(1)}</td>
+                                <td class="stat-number">${parseFloat(player.Def).toFixed(1)}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         `;
-
-        document.getElementById('player-stats').innerHTML = html;
     }
 
-    createStatsTable() {
-        if (!this.player.careerStats || this.player.careerStats.length === 0) {
-            return '<p>No statistics available</p>';
-        }
+    renderMILBStats() {
+        const player = this.player.milb;
+        
+        return `
+            <div class="stat-section">
+                <h3>2025 Minor League Statistics (${player.Level})</h3>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Level</th><th>Age</th><th>G</th><th>AB</th><th>PA</th><th>H</th><th>1B</th><th>2B</th><th>3B</th><th>HR</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="level-tag level-${player.Level.toLowerCase().replace('+', '-plus')}">${player.Level}</span></td>
+                                <td class="stat-number">${player.Age}</td>
+                                <td class="stat-number">${player.G}</td>
+                                <td class="stat-number">${player.AB}</td>
+                                <td class="stat-number">${player.PA}</td>
+                                <td class="stat-number">${player.H}</td>
+                                <td class="stat-number">${player['1B']}</td>
+                                <td class="stat-number">${player['2B']}</td>
+                                <td class="stat-number">${player['3B']}</td>
+                                <td class="stat-number">${player.HR}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
-        let tableHtml = `
-            <table class="stats-table">
-                <thead>
-                    <tr>
-                        <th>Year</th>
-                        <th>Level</th>
-                        <th>G</th>
-                        <th>PA</th>
-                        <th>AB</th>
-                        <th>H</th>
-                        <th>HR</th>
-                        <th>RBI</th>
-                        <th>AVG</th>
-                        <th>OBP</th>
-                        <th>SLG</th>
-                        <th>OPS</th>
-                        <th>wRC+</th>
-                    </tr>
-                </thead>
-                <tbody>
+            <div class="stat-section">
+                <h3>Runs, RBIs & Walks</h3>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>R</th><th>RBI</th><th>BB</th><th>IBB</th><th>SO</th><th>HBP</th><th>SF</th><th>SH</th><th>GDP</th><th>SB</th><th>CS</th><th>AVG</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="stat-number">${player.R}</td>
+                                <td class="stat-number">${player.RBI}</td>
+                                <td class="stat-number">${player.BB}</td>
+                                <td class="stat-number">${player.IBB}</td>
+                                <td class="stat-number">${player.SO}</td>
+                                <td class="stat-number">${player.HBP}</td>
+                                <td class="stat-number">${player.SF}</td>
+                                <td class="stat-number">${player.SH}</td>
+                                <td class="stat-number">${player.GDP}</td>
+                                <td class="stat-number">${player.SB}</td>
+                                <td class="stat-number">${player.CS}</td>
+                                <td class="stat-number stat-avg">${parseFloat(player.AVG).toFixed(3)}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         `;
+    }
 
-        this.player.careerStats.forEach(season => {
-            tableHtml += `
-                <tr>
-                    <td class="year-cell">${season.year}</td>
-                    <td>${season.level}</td>
-                    <td>${season.g}</td>
-                    <td>${season.pa}</td>
-                    <td>${season.ab}</td>
-                    <td>${season.h}</td>
-                    <td>${season.hr}</td>
-                    <td>${season.rbi}</td>
-                    <td>${season.avg.toFixed(3)}</td>
-                    <td>${season.obp.toFixed(3)}</td>
-                    <td>${season.slg.toFixed(3)}</td>
-                    <td>${season.ops.toFixed(3)}</td>
-                    <td>${season.wrcPlus}</td>
-                </tr>
-            `;
-        });
+    cleanName(name) {
+        return name ? name.replace(/['"]/g, '').trim() : '';
+    }
 
-        tableHtml += '</tbody></table>';
-        return tableHtml;
+    createId(name) {
+        return name.toLowerCase()
+                  .replace(/[^a-z0-9\s]/g, '')
+                  .replace(/\s+/g, '-');
+    }
+
+    showError(message) {
+        const errorDiv = document.getElementById('error-message');
+        errorDiv.textContent = message;
+        errorDiv.style.display = 'block';
     }
 }
 
-// Initialize
 document.addEventListener('DOMContentLoaded', () => {
-    new PlayerStats();
+    new PlayerPage();
 });
